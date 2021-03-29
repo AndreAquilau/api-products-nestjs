@@ -31,6 +31,7 @@ export class ProdutoService {
   public async findAll(): Promise<ProdutoInterface[] | Error> {
     try {
       const produtos = await this.produtoRepository.find();
+      console.log(produtos);
       return produtos;
     } catch (err) {
       this.logger.log(err.message);
@@ -40,9 +41,14 @@ export class ProdutoService {
 
   public async createProduct(
     produtoCreateDto: ProdutoCreateDto,
-  ): Promise<void | Error> {
+  ): Promise<any | Error> {
     try {
-      await this.produtoRepository.save(produtoCreateDto);
+      let product: ProdutoInterface;
+
+      await this.produtoRepository
+        .save(produtoCreateDto)
+        .then((res) => (product = res));
+      return product;
     } catch (err) {
       this.logger.log(err.message);
       return err;
@@ -53,9 +59,14 @@ export class ProdutoService {
     productFindById: ProductFindById,
   ): Promise<void | Error> {
     try {
-      const product = await this.produtoRepository.findOne({
-        id: productFindById,
-      });
+      let product: ProdutoInterface;
+
+      await this.produtoRepository
+        .findOne({
+          id: productFindById,
+        })
+        .then((res) => (product = res));
+
       await this.produtoRepository.delete({ id: product.id });
     } catch (err) {
       this.logger.log(err.message);
@@ -66,12 +77,19 @@ export class ProdutoService {
   public async updateProduct(
     productFindById: ProductFindById,
     productUpdateDto: ProductUpdateDto,
-  ): Promise<void | Error> {
+  ): Promise<any | Error> {
     try {
-      const product = await this.produtoRepository.findOne({
+      const product: ProdutoInterface = this.produtoRepository.create(
+        productUpdateDto,
+      );
+
+      const productFill = await this.produtoRepository.findOne({
         id: productFindById,
       });
-      await this.produtoRepository.update({ id: product.id }, productUpdateDto);
+
+      await this.produtoRepository.update(productFill, product);
+
+      return product;
     } catch (err) {
       this.logger.log(err.messsage);
       return err;

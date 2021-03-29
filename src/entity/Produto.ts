@@ -6,11 +6,12 @@ import {
   Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  BaseEntity,
 } from 'typeorm';
 
 @Index('pkey_produto', ['id'], { unique: true })
 @Entity('produtos')
-export class Produto implements ProdutoInterface {
+export class Produto extends BaseEntity implements ProdutoInterface {
   @PrimaryGeneratedColumn('increment')
   public readonly id: number;
 

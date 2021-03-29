@@ -68,8 +68,8 @@ export class ProdutoController {
     response: Response,
   ): Promise<any> {
     try {
-      await this.produtoService.createProduct(productCreateDto);
-      return response.status(HttpStatus.CREATED).end();
+      const product = await this.produtoService.createProduct(productCreateDto);
+      return response.status(HttpStatus.CREATED).json(product).end();
     } catch (err) {
       this.logger.log(err.message);
       return response
@@ -87,8 +87,8 @@ export class ProdutoController {
   ): Promise<any> {
     try {
       const { body, params } = request;
-      await this.produtoService.updateProduct(params.id, body);
-      return response.status(HttpStatus.OK).end();
+      const product = await this.produtoService.updateProduct(params.id, body);
+      return response.status(HttpStatus.OK).json(product).end();
     } catch (err) {
       this.logger.log(err.message);
       response
