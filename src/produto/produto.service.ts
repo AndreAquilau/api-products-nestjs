@@ -31,7 +31,7 @@ export class ProdutoService {
   public async findAll(): Promise<ProdutoInterface[] | Error> {
     try {
       const produtos = await this.produtoRepository.find();
-      console.log(produtos);
+      ///console.log(produtos);
       return produtos;
     } catch (err) {
       this.logger.log(err.message);
@@ -87,7 +87,14 @@ export class ProdutoService {
         id: productFindById,
       });
 
-      await this.produtoRepository.update(productFill, product);
+      //console.log(productFill);
+
+      const res = await this.produtoRepository.update(
+        { id: productFill.id },
+        product,
+      );
+
+      console.log(res);
 
       return product;
     } catch (err) {

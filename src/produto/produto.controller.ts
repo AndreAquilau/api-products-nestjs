@@ -87,6 +87,9 @@ export class ProdutoController {
   ): Promise<any> {
     try {
       const { body, params } = request;
+
+      //console.log(body);
+      //console.log(params);
       const product = await this.produtoService.updateProduct(params.id, body);
       return response.status(HttpStatus.OK).json(product).end();
     } catch (err) {
